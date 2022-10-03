@@ -1,6 +1,6 @@
 import { MongoClient } from 'mongodb'
 import MeetupList from '../components/meetups/MeetupList'
-import Head from 'next/Head'
+import {Head} from 'next/head'
 
 const HomePage = props => {
     return <>
