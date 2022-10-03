@@ -33,7 +33,6 @@ export async function getStaticProps(context) {
     // fetch data for a single meetup
 
     const meetupId = context.params.meetupId;
-    // console.log(meetupId);
     const mongoEndPoint = 'mongodb://charmi:seaways@ac-soqalfs-shard-00-00.i4aeslb.mongodb.net:27017,ac-soqalfs-shard-00-01.i4aeslb.mongodb.net:27017,ac-soqalfs-shard-00-02.i4aeslb.mongodb.net:27017/?ssl=true&replicaSet=atlas-q69fl0-shard-0&authSource=admin&retryWrites=true&w=majority'
     const client = await MongoClient.connect(
         mongoEndPoint
