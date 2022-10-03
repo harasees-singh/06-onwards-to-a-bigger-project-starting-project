@@ -1,11 +1,56 @@
 import MeetupDetail from "../../components/meetups/MeetupDetail";
-
-const Meetup = () => {
+import { MongoClient, ObjectId } from "mongodb";
+const Meetup = (props) => {
     return <MeetupDetail
-        title="Emilia Clarke"
-        address='The 7 kingdoms'
-        description='Mother of Dragons, The Unburnt, Queen of the Andals'
-        img='https://images0.persgroep.net/rcs/ux89VsrCe5Pc464f9z5C2-6u15Q/diocontent/162443495/_fitwidth/694/?appId=21791a8992982cd8da851550a453bd7f&quality=0.8&desiredformat=webp'
+        {...props.meetupData}
     />
 }
 export default Meetup;
+
+export const getStaticPaths = async () => {
+    const mongoEndPoint = 'mongodb://charmi:seaways@ac-soqalfs-shard-00-00.i4aeslb.mongodb.net:27017,ac-soqalfs-shard-00-01.i4aeslb.mongodb.net:27017,ac-soqalfs-shard-00-02.i4aeslb.mongodb.net:27017/?ssl=true&replicaSet=atlas-q69fl0-shard-0&authSource=admin&retryWrites=true&w=majority'
+    const client = await MongoClient.connect(
+        mongoEndPoint
+    );
+    const db = client.db();
+
+    const meetupsCollection = db.collection('meetups');
+
+    const meetups = await meetupsCollection.find({}, { _id: 1 }).toArray();
+    client.close();
+    return {
+        fallback: false,
+        paths: meetups.map((meetup) => {
+            return {
+                params: {
+                    meetupId: meetup._id.toString(),
+                }
+            }
+        })
+    }
+}
+export async function getStaticProps(context) {
+    // fetch data for a single meetup
+
+    const meetupId = context.params.meetupId;
+    // console.log(meetupId);
+    const mongoEndPoint = 'mongodb://charmi:seaways@ac-soqalfs-shard-00-00.i4aeslb.mongodb.net:27017,ac-soqalfs-shard-00-01.i4aeslb.mongodb.net:27017,ac-soqalfs-shard-00-02.i4aeslb.mongodb.net:27017/?ssl=true&replicaSet=atlas-q69fl0-shard-0&authSource=admin&retryWrites=true&w=majority'
+    const client = await MongoClient.connect(
+        mongoEndPoint
+    );
+    const db = client.db();
+
+    const meetupsCollection = db.collection('meetups');
+
+    const selectedMeetup = await meetupsCollection.findOne({_id: ObjectId(meetupId)})
+    return {
+        props: {
+            meetupData: {
+                id: meetupId,
+                title: selectedMeetup.title,
+                description: selectedMeetup.description,
+                image: selectedMeetup.image,
+            },
+        },
+    };
+}

@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import { MongoClient } from 'mongodb'
 import MeetupList from '../components/meetups/MeetupList'
 
@@ -8,8 +7,9 @@ const HomePage = props => {
 export const getStaticProps = async () => {
     // static generation
     // this code is executed during the build process (and not on client side)
+    const mongoEndPoint = 'mongodb://charmi:seaways@ac-soqalfs-shard-00-00.i4aeslb.mongodb.net:27017,ac-soqalfs-shard-00-01.i4aeslb.mongodb.net:27017,ac-soqalfs-shard-00-02.i4aeslb.mongodb.net:27017/?ssl=true&replicaSet=atlas-q69fl0-shard-0&authSource=admin&retryWrites=true&w=majority'
     const client = await MongoClient.connect(
-        'mongodb+srv://charmi:seaways@next-app.i4aeslb.mongodb.net/?retryWrites=true&w=majority'
+        mongoEndPoint
     );
     const db = client.db();
 
