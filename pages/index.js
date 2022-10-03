@@ -1,8 +1,15 @@
 import { MongoClient } from 'mongodb'
 import MeetupList from '../components/meetups/MeetupList'
+import Head from 'next/Head'
 
 const HomePage = props => {
-    return <MeetupList meetups={props.meetups} />
+    return <>
+        <Head>
+            <title>NEXT Meetups</title>
+            <meta name='description'>Browse a huge list of emilia clarke photos</meta>
+        </Head>
+        <MeetupList meetups={props.meetups} />
+    </>
 }
 export const getStaticProps = async () => {
     // static generation
@@ -19,14 +26,14 @@ export const getStaticProps = async () => {
 
     return {
         props: {
-            meetups: meetups.map( (meetup) => ({
+            meetups: meetups.map((meetup) => ({
                 title: meetup.title,
                 address: meetup.address,
                 image: meetup.image,
                 id: meetup._id.toString(),
             }))
         },
-        revalidate: 3600, // regenerate dis page on the server every hour 
+        revalidate: 3, // regenerate dis page on the server every hour 
     }
 }
 
