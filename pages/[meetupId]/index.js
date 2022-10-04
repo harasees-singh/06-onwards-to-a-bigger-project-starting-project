@@ -17,6 +17,7 @@ export const getStaticPaths = async () => {
     const meetupsCollection = db.collection('meetups');
 
     const meetups = await meetupsCollection.find({}, { _id: 1 }).toArray();
+    // meetups is an array of _id s
     client.close();
     return {
         fallback: 'blocking',
@@ -27,6 +28,15 @@ export const getStaticPaths = async () => {
                 }
             }
         })
+        // paths: [
+        //      params: {
+        //          meetupId: 88kldjflkasdjksdkau,
+        //      },
+        //      params: {
+        //          meetupId: 394823djfklajdsdfas,
+        //      },
+        //      ...
+        // ]
     }
 }
 export async function getStaticProps(context) {
